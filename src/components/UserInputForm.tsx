@@ -1,21 +1,22 @@
 import { createContext, useContext, useState } from "react";
+import { AppContext } from "../App";
 
-interface UserInput {
+export interface IUserInput {
   rows: number;
   cols: number;
 }
 
-export const UserInputContext = createContext<UserInput>({ rows: 0, cols: 0 });
-
-export const useUserInputContext = () => useContext(UserInputContext);
+export const UserInputContext = createContext<IUserInput | null>(null);
 
 const UserInputForm = () => {
   const [rows, setRows] = useState(0);
   const [cols, setCols] = useState(0);
-  const [matrix, setMatrix] = useState<UserInput>({ rows: 0, cols: 0 });
+  const context = useContext(AppContext);
 
   const handleClick = () => {
-    setMatrix({ rows, cols });
+    if (context?.handleContextUpdate && rows > 0 && cols > 0) {
+      context.handleContextUpdate(rows, cols);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -30,17 +31,15 @@ const UserInputForm = () => {
   };
 
   return (
-    <UserInputContext.Provider value={matrix}>
-      <form className="user-input__form">
-        <label htmlFor="cols">Columns</label>
-        <input value={cols} id="cols" onChange={handleChange} />
-        <label htmlFor="rows">Rows</label>
-        <input value={rows} id="rows" onChange={handleChange} />
-        <button type="button" onClick={handleClick}>
-          Apply
-        </button>
-      </form>
-    </UserInputContext.Provider>
+    <form className="user-input__form">
+      <label htmlFor="cols">Columns</label>
+      <input value={cols} id="cols" onChange={handleChange} />
+      <label htmlFor="rows">Rows</label>
+      <input value={rows} id="rows" onChange={handleChange} />
+      <button type="button" onClick={handleClick}>
+        Apply
+      </button>
+    </form>
   );
 };
 export default UserInputForm;
