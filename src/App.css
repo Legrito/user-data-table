@@ -1,0 +1,17 @@
+.container {
+  max-width: 1440px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 30px;
+  overflow: clip;
+  height: 100vh;
+}
+
+.table,
+th,
+td {
+  border: 1px solid green;
+}
