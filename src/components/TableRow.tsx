@@ -1,4 +1,5 @@
-import { createContext, useEffect, useState, memo, useCallback } from "react";
+import { useEffect, useState, memo, useMemo, useContext, useRef } from "react";
+import { AppContext, IValues } from "../App";
 import RowCell from "./RowCell";
 import uniqid from "uniqid";
 
@@ -25,21 +26,89 @@ const getArray = (cols: number): Cell[] => {
   }));
 };
 
+const getAllValues = (): number[] => {
+  const table = document.getElementById("table__random");
+  const cells = table?.querySelectorAll(".row__cell");
+
+  let arr: number[] = [];
+  cells?.forEach(el => arr.push(Number(el.innerHTML)));
+
+  return arr;
+};
+
 const TableRow = memo(({ rowName, rowNum, cols, getValue, id }: Props) => {
+  const context = useContext(AppContext);
   const [cellValues, setCellValues] = useState(getArray(cols));
   const [rowSum, setRowSum] = useState(
     cellValues.reduce((acc, num) => acc + num.amount, 0)
   );
   const [isSumHovered, setIsSumHovered] = useState(false);
+  // const [closest, setClosest] = useState<number[]>([]);
+  let closest = useRef<number[]>([]);
+  let allVals = useRef<number[]>([]);
 
   useEffect(() => {
     const newSum = cellValues.reduce((acc, num) => acc + num.amount, 0);
+
     setRowSum(newSum);
+
+    allVals.current = [...getAllValues()];
   }, [cellValues]);
 
   if (cols === 0) {
     return null;
   }
+
+  const findClosestNumbers = (
+    arr: number[],
+    target: number,
+    n: number = 1
+  ): number[] | [] => {
+    let arrValues = [...arr].sort((a, b) => a - b);
+    let closestValues: number[] = [];
+    while (closestValues.length < n) {
+      let closest: number = arrValues.reduce((acc, value) => {
+        let dif = 999;
+        if (Math.abs(target - value) < dif) {
+          dif = Math.abs(target - value);
+          acc = value;
+        }
+        return acc;
+      });
+
+      arrValues = arrValues.filter(el => el !== closest);
+      closestValues.push(closest);
+    }
+
+    return closestValues;
+  };
+
+  const handleNearest = (e: React.MouseEvent<HTMLButtonElement>) => {
+    console.log(e.currentTarget.value);
+    const closest: number[] = findClosestNumbers(
+      allVals.current,
+      +e.currentTarget.value,
+      context?.matrix?.amount
+    );
+    const table = document.getElementById("table__random");
+    const cells = table?.querySelectorAll(".row__cell");
+    cells?.forEach(el => {
+      if (closest.includes(+el.innerHTML)) {
+        el.classList.add("nearest");
+      }
+    });
+  };
+
+  const handleClearNearest = () => {
+    closest.current = [];
+    const table = document.getElementById("table__random");
+    const cells = table?.querySelectorAll(".row__cell");
+    cells?.forEach(el => {
+      if (el.classList.contains("nearest")) {
+        el.classList.remove("nearest");
+      }
+    });
+  };
 
   const handleValueChange = (newValue: number, colNum: number) => {
     const newCellValues = cellValues.map((cell, index) => {
@@ -60,23 +129,32 @@ const TableRow = memo(({ rowName, rowNum, cols, getValue, id }: Props) => {
     setIsSumHovered(false);
   };
 
+  // const handleGetClosest = () => {
+  //   return findClosestNumbers(allVals.current, context?.matrix?.amount);
+  // };
+
   return (
     <tr className={`table__row`}>
       <td>{rowName}</td>
-      {cellValues.map((val, id) => (
-        <td id={`${val.id}`} key={uniqid()}>
-          <RowCell
-            colNum={id + 1}
-            amount={val.amount}
-            onClick={handleValueChange}
-            percent={
-              isSumHovered
-                ? `-->${((val.amount / rowSum) * 100).toFixed(2)}%`
-                : ""
-            }
-          />
-        </td>
-      ))}
+      {cellValues.map((val, idx) => {
+        const id = uniqid();
+        return (
+          <td key={id} onMouseOut={handleClearNearest}>
+            <RowCell
+              id={id}
+              colNum={idx + 1}
+              amount={val.amount}
+              onMouseEnter={handleNearest}
+              onClick={handleValueChange}
+              percent={
+                isSumHovered
+                  ? `-->${((val.amount / rowSum) * 100).toFixed(2)}%`
+                  : ""
+              }
+            />
+          </td>
+        );
+      })}
       <td onMouseOver={handleHoverSum} onMouseLeave={handleLeave}>
         {rowSum}
       </td>

@@ -47,15 +47,6 @@ const TableWrap = () => {
     setAvarageVal(getAvarageArr(cols, rows));
   }, [context]);
 
-  useEffect(() => {
-    console.log(cellsValue.current);
-  });
-
-  // const handleSetCellValue = (value: Cell[]) => {
-  //   setCellsValue(prevState => {
-  //     return [...prevState, value];
-  //   });
-  // };
   const handleSetCellValue = (value: Cell[]) => {
     cellsValue.current = [...cellsValue.current, value];
   };
@@ -76,7 +67,7 @@ const TableWrap = () => {
   );
 
   return (
-    <table className="table">
+    <table className="table" id="table__random">
       <thead>
         <tr>
           <th></th>

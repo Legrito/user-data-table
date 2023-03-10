@@ -47,6 +47,20 @@ button {
   transform: scale(1.05);
 }
 
+.row__cell {
+  width: 100%;
+  height: 100%;
+  text-align-last: left;
+}
+
+.row__cell:hover {
+  background-color: rgba(255, 127, 80, 0.096);
+}
+
 .row__cell::after {
   content: attr(data-percentage);
+}
+
+.nearest {
+  background-color: coral;
 }

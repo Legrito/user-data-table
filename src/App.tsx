@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useState, useRef } from "react";
 import Container from "./components/Container";
 import UserInputForm from "./components/UserInputForm";
 import TableWrap from "./components/TableWrap";
@@ -9,6 +9,11 @@ export interface IMatrix {
   rows: number;
   cols: number;
   amount: number;
+}
+
+export interface IValues {
+  id: string;
+  value: number;
 }
 
 interface IAppContext {
@@ -26,7 +31,12 @@ const App = () => {
   };
 
   return (
-    <AppContext.Provider value={{ matrix, handleContextUpdate }}>
+    <AppContext.Provider
+      value={{
+        matrix,
+        handleContextUpdate,
+      }}
+    >
       <Container>
         <UserInputForm />
         <TableWrap />
