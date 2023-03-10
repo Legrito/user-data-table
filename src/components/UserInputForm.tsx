@@ -11,11 +11,17 @@ export const UserInputContext = createContext<IUserInput | null>(null);
 const UserInputForm = () => {
   const [rows, setRows] = useState(0);
   const [cols, setCols] = useState(0);
+  const [amount, setAmount] = useState(0);
   const context = useContext(AppContext);
 
   const handleClick = () => {
-    if (context?.handleContextUpdate && rows > 0 && cols > 0) {
-      context.handleContextUpdate(rows, cols);
+    if (
+      context?.handleContextUpdate &&
+      rows > 0 &&
+      cols > 0 &&
+      amount < rows * cols
+    ) {
+      context.handleContextUpdate(rows, cols, amount);
     }
   };
 
@@ -25,6 +31,8 @@ const UserInputForm = () => {
         return setCols(+e.target.value);
       case "rows":
         return setRows(+e.target.value);
+      case "amount":
+        return setAmount(+e.target.value);
       default:
         return null;
     }
@@ -32,11 +40,18 @@ const UserInputForm = () => {
 
   return (
     <form className="user-input__form">
-      <label htmlFor="cols">Columns</label>
-      <input value={cols} id="cols" onChange={handleChange} />
-      <label htmlFor="rows">Rows</label>
-      <input value={rows} id="rows" onChange={handleChange} />
-      <button type="button" onClick={handleClick}>
+      <fieldset>
+        <legend>Number of rows and columns</legend>
+        <label htmlFor="cols">Columns</label>
+        <input value={cols} id="cols" onChange={handleChange} />
+        <label htmlFor="rows">Rows</label>
+        <input value={rows} id="rows" onChange={handleChange} />
+      </fieldset>
+      <fieldset>
+        <legend>Number of nearest numbers</legend>
+        <input value={amount} id="amount" onChange={handleChange} />
+      </fieldset>
+      <button className="button" type="button" onClick={handleClick}>
         Apply
       </button>
     </form>

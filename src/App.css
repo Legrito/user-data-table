@@ -19,3 +19,34 @@ td {
 .table {
   width: 100%;
 }
+
+button {
+  background-color: unset;
+  border: unset;
+}
+
+.button {
+  display: inline-block;
+  margin-left: auto;
+  margin-top: 10px;
+  font-weight: 700;
+  background-color: tomato;
+  color: antiquewhite;
+  width: 70px;
+  height: 25px;
+  border-radius: 5px;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.4s;
+}
+
+.button:hover {
+  transform: scale(1.05);
+}
+
+.row__cell::after {
+  content: attr(data-percentage);
+}

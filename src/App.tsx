@@ -8,11 +8,12 @@ import "./App.css";
 export interface IMatrix {
   rows: number;
   cols: number;
+  amount: number;
 }
 
 interface IAppContext {
   matrix: IMatrix | null;
-  handleContextUpdate: (a: number, b: number) => void;
+  handleContextUpdate: (a: number, b: number, c: number) => void;
 }
 
 export const AppContext = createContext<IAppContext | null>(null);
@@ -20,8 +21,8 @@ export const AppContext = createContext<IAppContext | null>(null);
 const App = () => {
   const [matrix, setMatrix] = useState<IMatrix | null>(null);
 
-  const handleContextUpdate = (rows: number, cols: number) => {
-    setMatrix({ rows, cols });
+  const handleContextUpdate = (rows: number, cols: number, amount: number) => {
+    setMatrix({ rows, cols, amount });
   };
 
   return (
