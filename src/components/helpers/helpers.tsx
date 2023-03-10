@@ -32,7 +32,12 @@ export const findClosestNumbers = (
 
 export const getAvarageArr = (cols: number, rows: number): number[] => {
   let arr: number[] = [];
-  let cells = document.querySelectorAll(`.table__row > td > button`);
+  const table = document.getElementById("table__random");
+  const cells = table?.querySelectorAll(".row__cell");
+
+  if (!cells) {
+    return [];
+  }
 
   for (let i = 1; i <= cols; i++) {
     let sum = 0;

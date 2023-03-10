@@ -1,8 +1,7 @@
-import { useContext, useEffect, useState, useRef } from "react";
+import { useContext, useEffect, useState } from "react";
 import uniqid from "uniqid";
 import TableRow from "./TableRow";
 import { AppContext } from "../App";
-import { Cell } from "./TableRow";
 import AddRowBtn from "./AddRowBtn";
 import { getAvarageArr, getRows } from "./helpers/helpers";
 
@@ -13,7 +12,6 @@ export interface ITableRow {
 
 const TableWrap = () => {
   const context = useContext(AppContext);
-  const cellsValue = useRef<Cell[][]>([]);
   const [avarageVal, setAvarageVal] = useState<number[]>([]);
   const [tabRows, setTabRows] = useState<ITableRow[]>([]);
 
@@ -29,10 +27,6 @@ const TableWrap = () => {
     setTabRows(getRows(rows));
     setAvarageVal(getAvarageArr(cols, rows));
   }, [context]);
-
-  const handleSetCellValue = (value: Cell[]) => {
-    cellsValue.current = [...cellsValue.current, value];
-  };
 
   if (context === null || context?.matrix === null) {
     return null;
@@ -62,6 +56,10 @@ const TableWrap = () => {
     setTabRows(prevRows => prevRows.filter(el => el.id !== deletedId));
   };
 
+  const getAllValues = (value: number[]) => {
+    setAvarageVal(value);
+  };
+
   return (
     <div className="table__container">
       <table className="table" id="table__random">
@@ -88,7 +86,7 @@ const TableWrap = () => {
                 rowName={val.rowName}
                 rowNum={idx + 1}
                 cols={matrix.cols}
-                getValue={handleSetCellValue}
+                getValue={getAllValues}
                 onDelete={handleDelete}
               />
             );

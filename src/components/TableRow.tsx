@@ -1,7 +1,12 @@
 import { useEffect, useState, memo, useContext, useRef } from "react";
 import { AppContext } from "../App";
 import RowCell from "./RowCell";
-import { getArray, getAllValues, findClosestNumbers } from "./helpers/helpers";
+import {
+  getArray,
+  getAllValues,
+  findClosestNumbers,
+  getAvarageArr,
+} from "./helpers/helpers";
 import uniqid from "uniqid";
 
 type CellId = string; // unique value for all table
@@ -16,7 +21,7 @@ interface Props {
   rowName: string;
   rowNum: number;
   cols: number;
-  getValue: (a: Cell[]) => void;
+  getValue: (a: number[]) => void;
   id: string;
   onDelete: (a: string) => void;
 }
@@ -51,7 +56,6 @@ const TableRow = memo(
         +targetValue,
         context?.matrix?.amount
       );
-      console.log(targetValue, closest);
       const table = document.getElementById("table__random");
       const cells = table?.querySelectorAll(".row__cell");
       cells?.forEach(el => {
@@ -81,7 +85,10 @@ const TableRow = memo(
         }
       });
       setCellValues(newCellValues);
-      getValue(cellValues);
+      if (context && context.matrix) {
+        const allAvVals = getAvarageArr(cols, context.matrix.rows);
+        getValue(allAvVals);
+      }
     };
 
     const handleHoverSum = () => {
