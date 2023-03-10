@@ -36,7 +36,7 @@ const getAllValues = (): number[] => {
   return arr;
 };
 
-const TableRow = memo(({ rowName, rowNum, cols, getValue, id }: Props) => {
+const TableRow = ({ rowName, rowNum, cols, getValue, id }: Props) => {
   const context = useContext(AppContext);
   const [cellValues, setCellValues] = useState(getArray(cols));
   const [rowSum, setRowSum] = useState(
@@ -63,33 +63,21 @@ const TableRow = memo(({ rowName, rowNum, cols, getValue, id }: Props) => {
     arr: number[],
     target: number,
     n: number = 1
-  ): number[] | [] => {
-    let arrValues = [...arr].sort((a, b) => a - b);
-    let closestValues: number[] = [];
-    while (closestValues.length < n) {
-      let closest: number = arrValues.reduce((acc, value) => {
-        let dif = 999;
-        if (Math.abs(target - value) < dif) {
-          dif = Math.abs(target - value);
-          acc = value;
-        }
-        return acc;
-      });
-
-      arrValues = arrValues.filter(el => el !== closest);
-      closestValues.push(closest);
-    }
-
-    return closestValues;
+  ): number[] => {
+    const sorted = [...arr].sort(
+      (a, b) => Math.abs(a - target) - Math.abs(b - target)
+    );
+    return sorted.slice(0, n + 1);
   };
 
   const handleNearest = (e: React.MouseEvent<HTMLButtonElement>) => {
-    console.log(e.currentTarget.value);
+    let targetValue = (e.target as HTMLButtonElement).value;
     const closest: number[] = findClosestNumbers(
       allVals.current,
-      +e.currentTarget.value,
+      +targetValue,
       context?.matrix?.amount
     );
+    console.log(targetValue, closest);
     const table = document.getElementById("table__random");
     const cells = table?.querySelectorAll(".row__cell");
     cells?.forEach(el => {
@@ -160,6 +148,6 @@ const TableRow = memo(({ rowName, rowNum, cols, getValue, id }: Props) => {
       </td>
     </tr>
   );
-});
+};
 
 export default TableRow;
