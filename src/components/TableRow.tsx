@@ -1,6 +1,7 @@
 import { useEffect, useState, memo, useContext, useRef } from "react";
 import { AppContext } from "../App";
 import RowCell from "./RowCell";
+import { getArray, getAllValues, findClosestNumbers } from "./helpers/helpers";
 import uniqid from "uniqid";
 
 type CellId = string; // unique value for all table
@@ -19,23 +20,6 @@ interface Props {
   id: string;
   onDelete: (a: string) => void;
 }
-
-const getArray = (cols: number): Cell[] => {
-  return Array.from({ length: cols }, (_, i) => ({
-    id: uniqid(),
-    amount: Math.floor(Math.random() * 900) + 100,
-  }));
-};
-
-const getAllValues = (): number[] => {
-  const table = document.getElementById("table__random");
-  const cells = table?.querySelectorAll(".row__cell");
-
-  let arr: number[] = [];
-  cells?.forEach(el => arr.push(Number(el.innerHTML)));
-
-  return arr;
-};
 
 const TableRow = memo(
   ({ rowName, rowNum, cols, getValue, id, onDelete }: Props) => {
@@ -59,17 +43,6 @@ const TableRow = memo(
     if (cols === 0) {
       return null;
     }
-
-    const findClosestNumbers = (
-      arr: number[],
-      target: number,
-      n: number = 1
-    ): number[] => {
-      const sorted = [...arr].sort(
-        (a, b) => Math.abs(a - target) - Math.abs(b - target)
-      );
-      return sorted.slice(0, n + 1);
-    };
 
     const handleNearest = (e: React.MouseEvent<HTMLButtonElement>) => {
       let targetValue = (e.target as HTMLButtonElement).value;
@@ -117,10 +90,6 @@ const TableRow = memo(
     const handleLeave = () => {
       setIsSumHovered(false);
     };
-
-    // const handleGetClosest = () => {
-    //   return findClosestNumbers(allVals.current, context?.matrix?.amount);
-    // };
 
     const handleDeleteRow = (e: React.MouseEvent<HTMLButtonElement>) => {
       onDelete(e.currentTarget.value);

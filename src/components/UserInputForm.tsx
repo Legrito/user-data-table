@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { AppContext } from "../App";
 
 export interface IUserInput {
@@ -9,10 +9,19 @@ export interface IUserInput {
 export const UserInputContext = createContext<IUserInput | null>(null);
 
 const UserInputForm = () => {
+  const context = useContext(AppContext);
   const [rows, setRows] = useState(0);
   const [cols, setCols] = useState(0);
   const [amount, setAmount] = useState(0);
-  const context = useContext(AppContext);
+
+  useEffect(() => {
+    if (context && context.matrix) {
+      const { matrix } = context;
+      setRows(matrix.rows);
+      setCols(matrix.cols);
+      setAmount(matrix.amount);
+    }
+  }, [context]);
 
   const handleClick = () => {
     if (

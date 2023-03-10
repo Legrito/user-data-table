@@ -12,6 +12,7 @@ interface Props {
 const RowCell = memo(
   ({ amount, colNum, onClick, percent, id, onMouseEnter }: Props) => {
     const [value, setValue] = useState(amount);
+
     const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
       e.preventDefault();
       setValue(prev => {

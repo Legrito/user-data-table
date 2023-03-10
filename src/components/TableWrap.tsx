@@ -1,38 +1,15 @@
 import { useContext, useEffect, useState, useRef } from "react";
+import uniqid from "uniqid";
 import TableRow from "./TableRow";
 import { AppContext } from "../App";
 import { Cell } from "./TableRow";
-import uniqid from "uniqid";
 import AddRowBtn from "./AddRowBtn";
+import { getAvarageArr, getRows } from "./helpers/helpers";
 
-interface ITableRow {
+export interface ITableRow {
   rowName: string;
   id: string;
 }
-
-const getAvarageArr = (cols: number, rows: number): number[] => {
-  let arr: number[] = [];
-  let cells = document.querySelectorAll(`.table__row > td > button`);
-
-  for (let i = 1; i <= cols; i++) {
-    let sum = 0;
-    cells.forEach(el => {
-      if (Number(el.getAttribute("data-col")) === i) {
-        sum += Number(el.getAttribute("value"));
-      }
-    });
-    arr.push(Number((sum / rows).toFixed(2)));
-  }
-
-  return arr;
-};
-
-const getRows = (rows: number, rowNum?: number): ITableRow[] => {
-  return Array.from({ length: rows }, (_, i) => ({
-    rowName: `Cell values M = ${rowNum ?? i + 1}`,
-    id: uniqid(),
-  }));
-};
 
 const TableWrap = () => {
   const context = useContext(AppContext);
@@ -74,14 +51,14 @@ const TableWrap = () => {
   };
 
   const handleDelete = (deletedId: string) => {
-    // if (context && context.matrix) {
-    //   const {
-    //     matrix: { rows, cols, amount },
-    //     handleContextUpdate,
-    //   } = context;
+    if (context && context.matrix) {
+      const {
+        matrix: { rows, cols, amount },
+        handleContextUpdate,
+      } = context;
 
-    //   handleContextUpdate(rows - 1, cols, amount);
-    // }
+      handleContextUpdate(rows - 1, cols, amount);
+    }
     setTabRows(prevRows => prevRows.filter(el => el.id !== deletedId));
   };
 
