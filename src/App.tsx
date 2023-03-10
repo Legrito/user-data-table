@@ -4,6 +4,7 @@ import UserInputForm from "./components/UserInputForm";
 import TableWrap from "./components/TableWrap";
 
 import "./App.css";
+import AddRowBtn from "./components/AddRowBtn";
 
 export interface IMatrix {
   rows: number;
@@ -27,6 +28,9 @@ const App = () => {
   const [matrix, setMatrix] = useState<IMatrix | null>(null);
 
   const handleContextUpdate = (rows: number, cols: number, amount: number) => {
+    if (!rows || !cols || !amount) {
+      return;
+    }
     setMatrix({ rows, cols, amount });
   };
 
