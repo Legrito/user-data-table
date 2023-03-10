@@ -1,12 +1,4 @@
-import {
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-  memo,
-  useRef,
-  MutableRefObject,
-} from "react";
+import { useContext, useEffect, useState, useRef } from "react";
 import TableRow from "./TableRow";
 import { AppContext } from "../App";
 import { Cell } from "./TableRow";
@@ -44,7 +36,6 @@ const getRows = (rows: number, rowNum?: number): ITableRow[] => {
 
 const TableWrap = () => {
   const context = useContext(AppContext);
-  // const [cellsValue, setCellsValue] = useState<(Cell | Cell[])[]>([]);
   const cellsValue = useRef<Cell[][]>([]);
   const [avarageVal, setAvarageVal] = useState<number[]>([]);
   const [tabRows, setTabRows] = useState<ITableRow[]>([]);
@@ -95,15 +86,19 @@ const TableWrap = () => {
   };
 
   return (
-    <>
+    <div className="table__container">
       <table className="table" id="table__random">
         <thead>
           <tr>
             <th></th>
             {colsNames.map(val => (
-              <td key={uniqid()}>{val}</td>
+              <th key={uniqid()}>
+                <span>{val}</span>
+              </th>
             ))}
-            <th>Sum values</th>
+            <th>
+              <span>Sum values</span>
+            </th>
             <th className="remove__column"></th>
           </tr>
         </thead>
@@ -133,7 +128,7 @@ const TableWrap = () => {
         </tbody>
       </table>
       <AddRowBtn onClick={handleAddRow} />
-    </>
+    </div>
   );
 };
 

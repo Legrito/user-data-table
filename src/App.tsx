@@ -1,10 +1,9 @@
-import { createContext, useState, useRef } from "react";
+import { createContext, useState } from "react";
 import Container from "./components/Container";
 import UserInputForm from "./components/UserInputForm";
 import TableWrap from "./components/TableWrap";
 
 import "./App.css";
-import AddRowBtn from "./components/AddRowBtn";
 
 export interface IMatrix {
   rows: number;
@@ -28,7 +27,14 @@ const App = () => {
   const [matrix, setMatrix] = useState<IMatrix | null>(null);
 
   const handleContextUpdate = (rows: number, cols: number, amount: number) => {
-    if (!rows || !cols || !amount) {
+    if (
+      !rows ||
+      !cols ||
+      !amount ||
+      rows >= 100 ||
+      cols >= 100 ||
+      amount >= rows * cols
+    ) {
       return;
     }
     setMatrix({ rows, cols, amount });

@@ -43,12 +43,22 @@ const UserInputForm = () => {
       <fieldset>
         <legend>Number of rows and columns</legend>
         <label htmlFor="cols">Columns</label>
-        <input value={cols} id="cols" onChange={handleChange} />
+        <input
+          value={cols}
+          id="cols"
+          onChange={handleChange}
+          placeholder="Enter amount of columns"
+        />
         <label htmlFor="rows">Rows</label>
-        <input value={rows} id="rows" onChange={handleChange} />
+        <input
+          value={rows}
+          id="rows"
+          onChange={handleChange}
+          placeholder="Enter amount of rows"
+        />
       </fieldset>
       <fieldset>
-        <legend>Number of nearest numbers</legend>
+        <legend>Amount of nearest numbers</legend>
         <input value={amount} id="amount" onChange={handleChange} />
       </fieldset>
       <button className="button" type="button" onClick={handleClick}>

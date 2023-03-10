@@ -1,5 +1,5 @@
-import { useEffect, useState, memo, useMemo, useContext, useRef } from "react";
-import { AppContext, IValues } from "../App";
+import { useEffect, useState, memo, useContext, useRef } from "react";
+import { AppContext } from "../App";
 import RowCell from "./RowCell";
 import uniqid from "uniqid";
 
@@ -45,7 +45,6 @@ const TableRow = memo(
       cellValues.reduce((acc, num) => acc + num.amount, 0)
     );
     const [isSumHovered, setIsSumHovered] = useState(false);
-    // const [closest, setClosest] = useState<number[]>([]);
     let closest = useRef<number[]>([]);
     let allVals = useRef<number[]>([]);
 
@@ -129,7 +128,9 @@ const TableRow = memo(
 
     return (
       <tr className="table__row" id={id}>
-        <td>{rowName}</td>
+        <td>
+          <span>{rowName}</span>
+        </td>
         {cellValues.map((val, idx) => {
           const id = uniqid();
           return (
@@ -153,9 +154,11 @@ const TableRow = memo(
           {rowSum}
         </td>
         <td className="row__button">
-          <button className="button minus" value={id} onClick={handleDeleteRow}>
-            -
-          </button>
+          <button
+            className="button minus"
+            value={id}
+            onClick={handleDeleteRow}
+          />
         </td>
       </tr>
     );

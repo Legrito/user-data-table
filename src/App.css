@@ -1,31 +1,106 @@
 :root {
-  --accent: tomato;
+  --accent: #46b5b3;
+  --gray: #750202;
+  --text: #2f2f2f;
+  --light: #3d3d3d;
+  --hover: #0285c1;
+  --hover-closest: #e4730d;
 }
 
 * {
   box-sizing: border-box;
 }
 
+body {
+  font-family: "Inter";
+  color: var(--text);
+}
+
 .container {
-  max-width: 900px;
+  min-width: 900px;
+  width: 100%;
   margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
   gap: 30px;
-  overflow: clip;
-  height: 100vh;
+  min-height: 100vh;
+  padding: 40px;
 }
 
-th,
-td {
-  border: 1px solid green;
+.table__container {
+  width: 100%;
+  overflow: auto;
+  padding: 0 20px;
+  position: relative;
 }
 
 .table {
+  border-spacing: 0;
+  border-collapse: collapse;
   width: 100%;
+  margin-bottom: 30px;
 }
+
+table ~ td {
+  padding: 10px;
+}
+
+thead > tr > th {
+  height: 50px;
+  background-color: var(--gray);
+  text-align: left;
+  padding: 20px;
+  color: white;
+}
+
+thead {
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+    rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+}
+
+thead > tr {
+  font-size: 20px;
+}
+
+tbody > tr,
+tbody > tr ~ button {
+  height: 60px;
+  font-size: 18px;
+}
+
+tbody > tr > td:not(:first-child),
+span,
+button {
+  text-align: center;
+}
+
+tbody > tr > td:not(.row__button) {
+  padding: 10px;
+}
+
+tbody > tr:nth-child(2n) {
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+    rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+}
+
+tbody > tr:first-child {
+  margin-top: 20px;
+}
+
+span {
+  display: inline-block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-wrap: normal;
+}
+
+/* tbody > tr:nth-child(2n + 1) > td {
+  background-color: var(--light);
+} */
 
 button {
   background-color: unset;
@@ -34,11 +109,11 @@ button {
 
 .button {
   display: inline-block;
-  margin-left: auto;
   margin-top: 10px;
+  margin-left: auto;
   font-weight: 700;
   background-color: var(--accent);
-  color: antiquewhite;
+  color: var(--light);
   width: 70px;
   height: 25px;
   border-radius: 5px;
@@ -52,28 +127,58 @@ button {
 
 .plus {
   font-size: 24px;
-  width: 95%;
   font-weight: 300;
-  padding: 20px;
+  padding: 20px 0;
   margin: 0 auto;
+  position: absolute;
+  top: 10px;
+  left: 30px;
+  width: 149px;
 }
 
 .minus {
   position: absolute;
-  font-size: 32px;
+  font-size: 48px;
   font-weight: 300;
   display: flex;
   align-items: center;
   justify-content: center;
-  right: -22px;
+  right: -20px;
+  top: 20px;
   z-index: 20;
   width: 20px;
   height: 20px;
   border-radius: 50%;
   margin: 0;
   padding: 0;
-  color: var(--accent);
   background-color: unset;
+}
+
+.minus::before {
+  content: "";
+  position: absolute;
+  display: block;
+  width: 20px;
+  height: 4px;
+  background-color: var(--gray);
+  transition: all 0.5s;
+}
+
+.minus::after {
+  content: "";
+  position: absolute;
+  display: block;
+  width: 20px;
+  height: 4px;
+  background-color: var(--gray);
+  transition: all 0.5s;
+}
+
+.minus:hover::after {
+  transform: rotate(-145deg);
+}
+.minus:hover::before {
+  transform: rotate(145deg);
 }
 
 .button:hover {
@@ -93,14 +198,14 @@ button {
 
 .row__cell {
   width: 100%;
-  height: 100%;
-  text-align-last: left;
+  height: 60px;
   background-color: transparent;
   transform: all 0.8s;
+  font-size: 18px;
 }
 
 .row__cell:hover {
-  background-color: rgba(255, 127, 80, 0.096);
+  background-color: var(--hover);
 }
 
 .row__cell::after {
@@ -108,10 +213,34 @@ button {
 }
 
 .nearest {
-  background-color: coral;
+  background-color: var(--hover-closest);
 }
 
 .remove__column {
   width: 30px;
   border: none;
+}
+
+fieldset {
+  border: 2px solid var(--gray);
+  border-radius: 7px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+fieldset:first-child {
+  margin-bottom: 25px;
+}
+
+input {
+  border: 1px solid var(--gray);
+  border-radius: 3px;
+  padding: 5px;
+  margin-bottom: 10px;
+}
+
+legend,
+label {
+  font-weight: 500;
 }
